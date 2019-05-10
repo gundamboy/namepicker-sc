@@ -1,21 +1,16 @@
 import * as actionTypes from "./actions";
 
 const initialState = {
-	names: [],
-	winners: []
+	names: []
 };
 
 const Reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case actionTypes.SUCCESS:
+			console.log("reducer payload: ", action.payload);
 			return {
 				...state,
 				names: action.payload
-			};
-		case actionTypes.WINNER:
-			return {
-				...state,
-				winners: [...state.winners, action.payload]
 			};
 		default:
 			return state;

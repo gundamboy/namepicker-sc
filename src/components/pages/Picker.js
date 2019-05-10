@@ -13,11 +13,23 @@ class Picker extends Component {
 	}
 
 	render() {
-		const peopleArray = Object.keys(this.props.people);
-		const people = peopleArray.map(k => {
+		const testPeople = [
+			"Johnny Test",
+			"Johnny Test 2"
+		];
+		const peopleArray = Object.keys(testPeople);
+		const testpeople = peopleArray.map(k => {
 			//console.log(this.props.people[k]);
 			return (
-				<li key={k}>{this.props.people[k]}</li>
+				<li key={k}>{testPeople[k]}</li>
+			);
+		});
+
+		let names = this.props.people;
+		const people = names.map(k => {
+			console.log(this.props.people[k]);
+			return (
+				<li key={k}>{k}</li>
 			);
 		});
 
@@ -25,7 +37,13 @@ class Picker extends Component {
 			<div className="picker">
 				<div className="grid-container">
 					<div className="grid-x grid-padding-x">
-						<div className="cell">
+						<div className="cell medium-6">
+							<p className="test">Test People</p>
+							<ul>{testpeople}</ul>
+						</div>
+
+						<div className="cell medium-6">
+							<p className="test">People From State</p>
 							<ul>{people}</ul>
 						</div>
 					</div>
@@ -49,12 +67,6 @@ const mapDispatchToProps = (dispatch) => {
 				type: ActionTypes.SUCCESS,
 				payload: people
 			});
-		},
-		setWinner: (winner) => {
-			dispatch({
-				type: ActionTypes.WINNER,
-				payload: winner
-			})
 		}
 	};
 };

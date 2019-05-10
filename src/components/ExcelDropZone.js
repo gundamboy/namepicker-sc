@@ -26,30 +26,37 @@ const parseExcel = (file) => {
 };
 
 const ExcelDropZone = (props) => {
-	const [files, setFiles] = useState(0);
 	let people = useRef([]);
 	let go = false;
 	const onDrop = useCallback(acceptedFiles => {
 
-
 		acceptedFiles.forEach(file => {
 			people.current = parseExcel(file);
-			props.setNames(people.current);
-			go = true;
 			console.log("people from parse", people.current);
-			props.history.push("/picker");
-		});
 
-		console.log("people from props", props.people);
+			props.setNames(people.current);
+			console.log("people from props", props.people);
+
+			go = true;
+		});
 
 	}, []);
 
-	let count = 0;
 	useEffect(() => () => {
-		console.log("count: ", count);
+		console.log("props before IF: ", props);
+		if(props.people.length > 0) {
+			console.log("props.people is not zero.");
+			console.log("props.people.length: ", props.people.length);
+			console.log("props.people: ", props.people);
+		} else {
+			console.log("props.people is zero.");
+		}
+
+		console.log("props after IF: ", props);
+
 		if(go === true) {
 			console.log("people from props (useEffect)", props.people);
-			count++;
+			props.history.push('/picker');
 		}
 	}, [props]);
 
@@ -72,6 +79,10 @@ const ExcelDropZone = (props) => {
 						<p><span className="defaultText">To get started, drag and drop or click to load the excel file. Make sure there is a column labeled "Name".</span></p>
 				}
 			</div>
+
+			<div className="count">
+				There are: <code>{props.people.length}</code> names in the array;
+			</div>
 		</section>
 	)
 };
@@ -90,12 +101,6 @@ const mapDispatchToProps = (dispatch) => {
 				type: ActionTypes.SUCCESS,
 				payload: people
 			});
-		},
-		setWinner: (winner) => {
-			dispatch({
-				type: ActionTypes.WINNER,
-				payload: winner
-			})
 		}
 	};
 };
