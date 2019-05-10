@@ -30,15 +30,14 @@ const ExcelDropZone = (props) => {
 	let people = useRef([]);
 	let go = false;
 	const onDrop = useCallback(acceptedFiles => {
-		setFiles(acceptedFiles.map(file => Object.assign(file, {
-			preview: URL.createObjectURL(file)
-		})));
+
 
 		acceptedFiles.forEach(file => {
 			people.current = parseExcel(file);
 			props.setNames(people.current);
 			go = true;
 			console.log("people from parse", people.current);
+			props.history.push("/picker");
 		});
 
 		console.log("people from props", props.people);
