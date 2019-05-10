@@ -56,7 +56,11 @@ const ExcelDropZone = (props) => {
 
 		if(go === true) {
 			console.log("people from props (useEffect)", props.people);
-			props.history.push('/picker');
+
+			setTimeout(function () {
+				props.history.push('/picker');
+			}, 300);
+
 		}
 	}, [props]);
 
@@ -89,8 +93,7 @@ const ExcelDropZone = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		people: state.names,
-		winners : state.winners
+		people: state.names
 	};
 };
 
