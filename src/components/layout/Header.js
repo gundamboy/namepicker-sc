@@ -11,7 +11,7 @@ function Header() {
 						<img src={logo} alt=""/>
 					</div>
 					<div className="cell medium-9">
-						<h4>title</h4>
+						<h1>Annual Meeting Giveaway</h1>
 					</div>
 				</div>
 			</div>

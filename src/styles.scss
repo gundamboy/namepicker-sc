@@ -1,16 +1,25 @@
+
+.root, .app, .picker {
+  height: 100%;
+}
+
+body {
+  background-color: #f1f1f1;
+}
+
 header {
   padding: 2rem 0;
   margin-bottom: 2rem;
-  background: #d8eff7;
+  background: #ffffff;
 
-  h4 {
-    font-size: 1.4rem;
-    padding-top: 0.5rem;
-  }
+  border-bottom: 30px solid #D14728;
 
   hr {
     margin-top: 2rem;
   }
+}
+form {
+  margin-bottom: 3rem;
 }
 
 .start-here {
@@ -31,6 +40,114 @@ header {
 
     p {
       margin: 0;
+    }
+  }
+}
+
+
+
+.picker {
+  button.pick-winner {
+    width: 120px;
+    height: 120px;
+    border-radius: 70px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: 4px solid #D14728;
+    outline: none;
+    line-height: 1.2;
+
+    &:active, &:focus {
+      outline: none;
+    }
+  }
+
+  button.reset {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    outline: none;
+
+    &:active, &:focus {
+      outline: none;
+    }
+  }
+}
+
+.winnerDisplay-enter {
+  opacity: 0;
+}
+.winnerDisplay-enter.winnerDisplay-enter-active {
+  opacity: 1;
+  transition: opacity 0.3s ease-in;
+}
+.winnerDisplay-leave {
+  opacity: 1;
+}
+.winnerDisplay-leave.winnerDisplay-leave-active {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.currentWinner {
+  opacity: 0;
+  color: #fff;
+  font-size: 4rem;
+  font-weight: bold;
+  font-family: Helvetica, sans-serif;
+  text-align: center;
+  text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb,
+  0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1),
+  0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3),
+  0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25),
+  0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15);
+}
+
+.winner-animation-container {
+  position: relative;
+}
+
+.ml4 {
+  position: relative;
+  font-weight: 900;
+  font-size: 4.5em;
+}
+.ml4 .letters {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  top: 0.3em;
+  right: 0;
+  opacity: 0;
+}
+
+.current-winners {
+  background: #182F58;
+  height: 200px;
+  color: #ffffff;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+
+  .winners-list {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    li {
+      font-size: 1.2rem;
+      margin-right: 10px;
+      text-transform: capitalize;
+
+      &:after {
+        content: ", ";
+      }
+
+      &:last-child:after {
+        content: "";
+      }
     }
   }
 }

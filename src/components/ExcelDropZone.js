@@ -18,7 +18,12 @@ const parseExcel = (file) => {
 		const json_array = XLSX.utils.sheet_to_json(wb.Sheets[first_sheet]);
 
 		json_array.forEach(function (item) {
-			names.push(item['Name']);
+			let name = item["Name"];
+			name = name.toLowerCase()
+				.split(' ')
+				.map((s)=> s.charAt(0).toUpperCase() + s.substring(1))
+				.join(' ');
+			names.push(name);
 		});
 	};
 
@@ -32,10 +37,7 @@ const ExcelDropZone = (props) => {
 
 		acceptedFiles.forEach(file => {
 			people.current = parseExcel(file);
-			console.log("people from parse", people.current);
-
 			props.setNames(people.current);
-			console.log("people from props", props.people);
 
 			go = true;
 		});
@@ -43,20 +45,8 @@ const ExcelDropZone = (props) => {
 	}, []);
 
 	useEffect(() => () => {
-		console.log("props before IF: ", props);
-		if(props.people.length > 0) {
-			console.log("props.people is not zero.");
-			console.log("props.people.length: ", props.people.length);
-			console.log("props.people: ", props.people);
-		} else {
-			console.log("props.people is zero.");
-		}
-
-		console.log("props after IF: ", props);
 
 		if(go === true) {
-			console.log("people from props (useEffect)", props.people);
-
 			setTimeout(function () {
 				props.history.push('/picker');
 			}, 300);

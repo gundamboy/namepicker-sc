@@ -7,7 +7,6 @@ const initialState = {
 const Reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case actionTypes.SUCCESS:
-			console.log("reducer payload: ", action.payload);
 			return {
 				...state,
 				names: action.payload
