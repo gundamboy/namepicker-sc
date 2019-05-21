@@ -1,6 +1,7 @@
-
-.root, .app, .picker {
+html {height: 100%;}
+#root, .app, .App, .picker {
   height: 100%;
+  position: relative;
 }
 
 body {
@@ -9,10 +10,12 @@ body {
 
 header {
   padding: 2rem 0;
-  margin-bottom: 2rem;
   background: #ffffff;
-
   border-bottom: 30px solid #D14728;
+
+  h1 {
+    font-family: futura-pt, sans-serif;
+  }
 
   hr {
     margin-top: 2rem;
@@ -47,6 +50,8 @@ form {
 
 
 .picker {
+  position: relative;
+
   button.pick-winner {
     width: 120px;
     height: 120px;
@@ -63,14 +68,26 @@ form {
   }
 
   button.reset {
-    position: absolute;
-    left: 0;
-    bottom: 0;
+    position: relative;
+    top: -10px;
+    left: -28px;
     outline: none;
+    color: #888888;
+    margin: 0;
+    padding: 0;
 
-    &:active, &:focus {
+    &:active, &:focus, &:hover {
       outline: none;
+      color: #888888;
     }
+  }
+
+  .picker-form {
+    padding-top : 2em;
+  }
+
+  #page-wrap {
+    height: 100%;
   }
 }
 
@@ -91,16 +108,12 @@ form {
 
 .currentWinner {
   opacity: 0;
-  color: #fff;
+  color: #424242;
   font-size: 4rem;
   font-weight: bold;
-  font-family: Helvetica, sans-serif;
+  font-family: futura-pt, sans-serif;
   text-align: center;
-  text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb,
-  0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1),
-  0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3),
-  0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25),
-  0 10px 10px rgba(0,0,0,.2), 0 20px 20px rgba(0,0,0,.15);
+  text-shadow: 2px 2px 0px #d5d5d5, 4px 4px 0px rgba(0, 0, 0, 0.2);
 }
 
 .winner-animation-container {
@@ -116,7 +129,6 @@ form {
   position: absolute;
   margin: auto;
   left: 0;
-  top: 0.3em;
   right: 0;
   opacity: 0;
 }
@@ -150,4 +162,107 @@ form {
       }
     }
   }
+}
+
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 26px;
+  height: 20px;
+  right: 16px;
+  top: 16px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: #373a47;
+}
+
+/* Color/shape of burger icon bars on hover*/
+.bm-burger-bars-hover {
+  background: #a90000;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+  right: 14px !important;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/*
+Sidebar wrapper styles
+Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
+*/
+.bm-menu-wrap {
+  position: fixed;
+  height: auto;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: #373a47;
+  padding: 0.4em 1.5em 0;
+  font-size: 1.15em;
+  height: auto;
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+  padding: 0.8em;
+  position: relative;
+  height: auto;
+
+  p {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+
+    &:after {
+      content: "•";
+      padding: 0 0.85rem;
+    }
+
+    &:last-child:after {
+      content: "";
+      padding-right: 0;
+    }
+
+  }
+}
+
+/* Individual item */
+.bm-item {
+  display: inline-block;
+  border: none;
+  outline: none;
+
+  &.wrap {
+    display: flex !important;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+}
+h3.bm-item {
+  border-bottom: 1px solid #cccccc;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
 }

@@ -2,29 +2,34 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as ActionTypes from "../../reducers/actions";
 import {withRouter} from "react-router";
-import {CSSTransition, TransitionGroup} from "react-transition-group";
+import {CSSTransition} from "react-transition-group";
 import anime from 'animejs';
+import {stack as Menu} from 'react-burger-menu';
 
 class Picker extends Component {
 	constructor(props) {
 		super(props);
 		this.onClick = this.onClick.bind(this);
+		this.resetGame = this.resetGame.bind(this);
 		this.state = {
-			names: [],
-			winners: [],
+			sc_names: [],
+			sc_winners: [],
 			display: false,
-			currentWinner: ""
+			sc_currentWinner: ""
 		};
 
 		this.winnerRef = React.createRef();
+		console.log(props);
 
 	}
 
-	clearLocalStorage(e) {
+	resetGame(e) {
 		e.preventDefault();
-		console.log("clearLocalStorage");
-		localStorage.clear();
-		return window.location.pathname = '/';
+		localStorage.removeItem("scholarship_names");
+		localStorage.removeItem("scholarship_winners");
+		localStorage.removeItem("current_scholarship_winner");
+		//return window.location.pathname = '/';
+		this.props.history.goBack();
 	}
 
 	onClick(e) {
@@ -32,11 +37,11 @@ class Picker extends Component {
 		this.handlePickWinnerButton();
 	}
 
-	setLocalStorage(key, value) {
+	static setLocalStorage(key, value) {
 		return localStorage.setItem(key, JSON.stringify(value));
 	}
 
-	getFromLocalStorage(key) {
+	static getFromLocalStorage(key) {
 		return JSON.parse(localStorage.getItem(key));
 	}
 
@@ -47,7 +52,7 @@ class Picker extends Component {
 		ml4.scaleOut = 3;
 		ml4.durationIn = 300;
 		ml4.durationOut = 600;
-		ml4.delay = 100;
+		ml4.delay = 0;
 
 		let w = {};
 		w.opacityIn = [0,1];
@@ -55,15 +60,10 @@ class Picker extends Component {
 		w.scaleOut = 2;
 		w.durationIn = 300;
 		w.durationOut = 600;
-		w.delay = 100;
+		w.delay = 0;
 
 		this.animeRef = anime.timeline({loop: false})
 		.add({
-			targets: 'currentWinner',
-			opacity: ml4.opacityIn,
-			scale: ml4.scaleIn,
-			duration: ml4.durationIn
-		}).add({
 			targets: '.ml4 .letters-1',
 			opacity: ml4.opacityIn,
 			scale: ml4.scaleIn,
@@ -111,62 +111,57 @@ class Picker extends Component {
 			duration: ml4.durationOut,
 			easing: "easeInExpo",
 			delay: ml4.delay
-		}).add({
-			targets: '.ml4',
-			opacity: 0,
-			duration: 500,
-			delay: w.delay
 		}).add({
 			targets: '.currentWinner',
-			opacity: w.opacityIn,
-			scale: w.scaleIn,
-			duration: w.durationOut,
+			opacity: ml4.opacityIn,
+			scale: ml4.scaleIn,
+			duration: ml4.durationOut,
 			easing: "easeInExpo",
-			delay: w.delay
+			delay: ml4.delay
 			});
 	}
 
 	componentDidMount() {
-		if(this.getFromLocalStorage("names") === null || this.getFromLocalStorage("names").length === 0) {
-			this.setLocalStorage("names", this.props.people);
+		if(Picker.getFromLocalStorage("scholarship_names") === null || Picker.getFromLocalStorage("scholarship_names").length === 0) {
+			Picker.setLocalStorage("scholarship_names", this.props.people);
 
 			this.setState({
-				names: this.getFromLocalStorage("names"),
+				sc_names: Picker.getFromLocalStorage("scholarship_names"),
 			});
 
 		} else {
 			this.setState({
-				names: this.getFromLocalStorage("names"),
+				sc_names: Picker.getFromLocalStorage("scholarship_names"),
 			});
 		}
 
 
-		if(this.getFromLocalStorage("winners") === null || this.getFromLocalStorage("winners").length === 0) {
-			this.setLocalStorage("winners", this.state.winners);
+		if(Picker.getFromLocalStorage("scholarship_winners") === null || Picker.getFromLocalStorage("scholarship_winners").length === 0) {
+			Picker.setLocalStorage("scholarship_winners", this.state.sc_winners);
 			this.setState({
-				winners: this.getFromLocalStorage("winners"),
+				sc_winners: Picker.getFromLocalStorage("scholarship_winners"),
 			});
 		} else {
 			this.setState({
-				winners: this.getFromLocalStorage("winners"),
+				sc_winners: Picker.getFromLocalStorage("scholarship_winners"),
 			});
 		}
 
-		if(this.getFromLocalStorage("currentWinner") === null || this.getFromLocalStorage("currentWinner").length === 0) {
-			this.setLocalStorage("currentWinner", this.state.currentWinner);
+		if(Picker.getFromLocalStorage("current_scholarship_winner") === null || Picker.getFromLocalStorage("current_scholarship_winner").length === 0) {
+			Picker.setLocalStorage("current_scholarship_winner", this.state.currentWinner);
 			this.setState({
-				currentWinner: this.getFromLocalStorage("currentWinner"),
+				sc_currentWinner: Picker.getFromLocalStorage("current_scholarship_winner"),
 			});
 		} else {
 			this.setState({
-				currentWinner: this.getFromLocalStorage("currentWinner"),
+				sc_currentWinner: Picker.getFromLocalStorage("current_scholarship_winner"),
 			});
 		}
 
 	}
 
 	getWinnersFromState() {
-		let winnersArray = this.state.winners;
+		let winnersArray = this.state.sc_winners;
 		return winnersArray.map(k => {
 			return (
 				<CSSTransition
@@ -174,7 +169,7 @@ class Picker extends Component {
 					classNames="winnerDisplay"
 					timeout={300}
 				>
-					<li>{k}</li>
+					<p>{k}</p>
 				</CSSTransition>
 			);
 		});
@@ -182,7 +177,7 @@ class Picker extends Component {
 
 	handlePickWinnerButton() {
 		this.winnerStartAnimation();
-		let namesArray = this.state.names;
+		let namesArray = this.state.sc_names;
 		let randomWinner = namesArray[Math.floor(Math.random()*namesArray.length)];
 		let winnerIndex = namesArray.indexOf(randomWinner);
 
@@ -190,14 +185,14 @@ class Picker extends Component {
 			namesArray.splice(winnerIndex, 1);
 		}
 
-		this.setLocalStorage("names", namesArray);
-		this.setLocalStorage("winners", [...this.state.winners, randomWinner]);
-		this.setLocalStorage("currentWinner", randomWinner);
+		Picker.setLocalStorage("scholarship_names", namesArray);
+		Picker.setLocalStorage("current_scholarship_winner", [...this.state.sc_winners, randomWinner]);
+		Picker.setLocalStorage("current_scholarship_winner", randomWinner);
 
 		this.setState({
-			names: this.getFromLocalStorage("names"),
-			winners: this.getFromLocalStorage("winners"),
-			currentWinner: this.getFromLocalStorage("currentWinner")
+			sc_names: Picker.getFromLocalStorage("scholarship_names"),
+			sc_winners: Picker.getFromLocalStorage("current_scholarship_winner"),
+			sc_currentWinner: Picker.getFromLocalStorage("current_scholarship_winner")
 		});
 
 		this.getWinnersFromState();
@@ -207,12 +202,19 @@ class Picker extends Component {
 		const winnersList = this.getWinnersFromState();
 
 		return (
-			<div className="picker">
-				<div className="all-winners container">
+			<div className="picker" id="outer-container">
+				<Menu width={700}>
+					<button className="button clear reset" onClick={this.resetGame}>Reset The GiveAway</button>
+					<h3>The Winners!</h3>
+					<div className="wrap">
+						{winnersList}
+					</div>
+				</Menu>
+				<div id="page-wrap">
 					<div className="grid-container">
 						<div className="grid-x grid-padding-x">
 							<div className="cell medium-12">
-								<form action="">
+								<form className="picker-form" action="">
 									<fieldset>
 										<button className="button pick-winner" onClick={this.onClick}>Pick a winner!</button>
 									</fieldset>
@@ -224,22 +226,13 @@ class Picker extends Component {
 										<span className="letters letters-2">The</span>
 										<span className="letters letters-3">Winner</span>
 										<span className="letters letters-4">Is</span>
+
 									</h1>
 								</div>
-
 								<div className="currentWinner">
 									{this.state.currentWinner}
 								</div>
-							</div>
-						</div>
-					</div>
-					<div className="current-winners">
-						<div className="grid-container">
-							<div className="grid grid-padding-x">
-								<h3>The Winners!</h3>
-								<ul className="no-bullet winners-list">
-									{winnersList}
-								</ul>
+
 							</div>
 						</div>
 					</div>
@@ -251,8 +244,8 @@ class Picker extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		people: state.names,
-		winners: state.winners
+		people: state.sc_names,
+		winners: state.sc_winners
 	};
 };
 

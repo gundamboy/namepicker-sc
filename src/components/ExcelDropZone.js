@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {withRouter} from "react-router";
 import {connect} from "react-redux";
 import * as ActionTypes from "../reducers/actions"
@@ -27,32 +27,30 @@ const parseExcel = (file) => {
 		});
 	};
 
+
 	return names;
 };
 
 const ExcelDropZone = (props) => {
 	let people = useRef([]);
-	let go = false;
+	let go = useRef(false);
 	const onDrop = useCallback(acceptedFiles => {
 
 		acceptedFiles.forEach(file => {
 			people.current = parseExcel(file);
 			props.setNames(people.current);
-
-			go = true;
+			go.current = true;
 		});
 
-	}, []);
+	}, [props]);
 
 	useEffect(() => () => {
-
-		if(go === true) {
+		if(go.current === true) {
 			setTimeout(function () {
 				props.history.push('/picker');
 			}, 300);
-
 		}
-	}, [props]);
+	});
 
 
 	const {getRootProps, getInputProps, isDragActive} = useDropzone({
@@ -72,10 +70,6 @@ const ExcelDropZone = (props) => {
 						<p><span className="defaultText">Drop the files here ...</span></p> :
 						<p><span className="defaultText">To get started, drag and drop or click to load the excel file. Make sure there is a column labeled "Name".</span></p>
 				}
-			</div>
-
-			<div className="count">
-				There are: <code>{props.people.length}</code> names in the array;
 			</div>
 		</section>
 	)
